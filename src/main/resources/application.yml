@@ -1,1 +1,5 @@
-
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_KEY}
+      secret-key: ${AWS_SECRET}
