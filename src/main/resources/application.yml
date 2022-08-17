@@ -3,3 +3,4 @@ cloud:
     credentials:
       access-key: ${AWS_KEY}
       secret-key: ${AWS_SECRET}
+    region: us-west-2

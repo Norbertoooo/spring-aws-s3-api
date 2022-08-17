@@ -3,7 +3,6 @@ package com.vitu.config;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +16,8 @@ public class AwsConfig {
     String key;
     @Value("${cloud.aws.credentials.secret-key}")
     String secret;
+    @Value("${cloud.aws.region}")
+    String region;
 
     @Bean
     public AmazonS3 amazonS3() {
@@ -24,7 +25,7 @@ public class AwsConfig {
         return AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(Regions.DEFAULT_REGION)
+                .withRegion(region)
                 .build();
     }
 }
