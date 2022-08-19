@@ -1,6 +1,7 @@
 package com.vitu.controller;
 
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.vitu.service.BucketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,26 @@ public class BucketController {
         log.info("Requisição para adiciona novo objeto ao bucket: {}", bucketNome);
         bucketService.adicionarObjeto(bucketNome, arquivo);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{bucketNome}/objetos")
+    public ResponseEntity<List<S3ObjectSummary>> listarObjetos(@PathVariable String bucketNome) {
+        log.info("Requisição para listar objetos do bucket: {}", bucketNome);
+        return ResponseEntity.ok(bucketService.listarObjetos(bucketNome));
+    }
+
+    @DeleteMapping("/{bucketNome}/objetos/{objetoNome}")
+    public ResponseEntity<?> excluirObjeto(@PathVariable String bucketNome, @PathVariable String objetoNome) {
+        log.info("Requisição para excluir objeto: {} do bucket: {}", bucketNome, objetoNome);
+        bucketService.excluirObjeto(bucketNome, objetoNome);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{bucketNome}")
+    public ResponseEntity<?> excluirBucket(@PathVariable String bucketNome) {
+        log.info("Requisição para excluir bucket: {}", bucketNome);
+        bucketService.excluirBucket(bucketNome);
+        return ResponseEntity.noContent().build();
     }
 
 }

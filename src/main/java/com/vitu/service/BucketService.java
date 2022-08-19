@@ -3,6 +3,7 @@ package com.vitu.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class BucketService {
         return amazonS3.listBuckets();
     }
 
-    public List<?> listarObjetos(String bucketNome) {
+    public List<S3ObjectSummary> listarObjetos(String bucketNome) {
         return amazonS3.listObjectsV2(bucketNome).getObjectSummaries();
     }
 
@@ -47,6 +48,18 @@ public class BucketService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public void excluirObjeto(String bucketNome, String objetoNome) {
+        if (amazonS3.doesBucketExistV2(bucketNome)) {
+            amazonS3.deleteObject(bucketNome, objetoNome);
+        }
+    }
+
+    public void excluirBucket(String bucketNome) {
+        if (amazonS3.doesBucketExistV2(bucketNome)) {
+            amazonS3.deleteBucket(bucketNome);
         }
     }
 
