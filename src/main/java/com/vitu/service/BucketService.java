@@ -1,9 +1,8 @@
 package com.vitu.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -63,4 +62,13 @@ public class BucketService {
         }
     }
 
+    public CopyObjectResult copiarObjeto(String bucketNomeOrigem, String objetoNome, String bucketNomeDestino) {
+        return amazonS3.copyObject(bucketNomeOrigem, objetoNome, bucketNomeDestino, objetoNome);
+    }
+
+    public byte[] downloadObjeto(String bucketNome, String objetoNome) throws IOException {
+        S3ObjectInputStream objectContent = amazonS3.getObject(bucketNome, objetoNome).getObjectContent();
+        byte[] bytes = IOUtils.toByteArray(objectContent);
+        return bytes;
+    }
 }
