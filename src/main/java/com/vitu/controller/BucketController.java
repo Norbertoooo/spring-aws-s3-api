@@ -3,7 +3,7 @@ package com.vitu.controller;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CopyObjectResult;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.vitu.controller.request.CopyObjectRequest;
+import com.vitu.controller.request.ObjetoRequest;
 import com.vitu.service.BucketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,9 +71,16 @@ public class BucketController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/objetos/copy")
-    public ResponseEntity<CopyObjectResult> copiarObjeto(@RequestBody CopyObjectRequest body) {
+    @PostMapping("/objetos/copiar")
+    public ResponseEntity<CopyObjectResult> copiarObjeto(@RequestBody ObjetoRequest body) {
         CopyObjectResult copyObjectResult = bucketService.copiarObjeto(body.bucketNomeOrigem(), body.objetoNome(),
+                body.bucketNomeDestino());
+        return ResponseEntity.status(HttpStatus.CREATED).body(copyObjectResult);
+    }
+
+    @PostMapping("/objetos/mover")
+    public ResponseEntity<CopyObjectResult> moverObjeto(@RequestBody ObjetoRequest body) {
+        CopyObjectResult copyObjectResult = bucketService.moverObjeto(body.bucketNomeOrigem(), body.objetoNome(),
                 body.bucketNomeDestino());
         return ResponseEntity.status(HttpStatus.CREATED).body(copyObjectResult);
     }

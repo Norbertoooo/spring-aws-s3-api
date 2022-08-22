@@ -68,7 +68,16 @@ public class BucketService {
 
     public byte[] downloadObjeto(String bucketNome, String objetoNome) throws IOException {
         S3ObjectInputStream objectContent = amazonS3.getObject(bucketNome, objetoNome).getObjectContent();
-        byte[] bytes = IOUtils.toByteArray(objectContent);
-        return bytes;
+        return IOUtils.toByteArray(objectContent);
     }
+
+    public CopyObjectResult moverObjeto(String bucketNomeOrigem, String objetoNome, String bucketNomeDestino) {
+        if (amazonS3.doesBucketExistV2(bucketNomeOrigem) && amazonS3.doesBucketExistV2(bucketNomeDestino)) {
+            CopyObjectResult copyObjectResult = amazonS3.copyObject(bucketNomeOrigem, objetoNome, bucketNomeDestino, objetoNome);
+            amazonS3.deleteObject(bucketNomeOrigem, objetoNome);
+            return copyObjectResult;
+        }
+        return null;
+    }
+
 }
